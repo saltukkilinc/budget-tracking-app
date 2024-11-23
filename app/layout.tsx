@@ -5,6 +5,8 @@ import "./globals.css";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
 import { cookies } from "next/headers";
+import { ThemeProvider } from "@/components/theme-provider";
+import ModeSwitcher from "@/components/mode-switcher";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -34,13 +36,21 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <SidebarProvider defaultOpen={defaultOpen}>
-          <AppSidebar />
-          <main>
-            <SidebarTrigger />
-            {children}
-          </main>
-        </SidebarProvider>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <SidebarProvider defaultOpen={defaultOpen}>
+            <AppSidebar />
+            <main>
+              <SidebarTrigger />
+              <ModeSwitcher />
+              {children}
+            </main>
+          </SidebarProvider>
+        </ThemeProvider>
       </body>
     </html>
   );
