@@ -1,9 +1,10 @@
+import PageContainer from "@/components/page-container";
 import React from "react";
 
 export default function IncomeAndExpanseItemsPage() {
   return (
-    <main>
-      <h1>Gelir ve Gider Kalemleri</h1>
-    </main>
+    <PageContainer title="Gelir ve Gider Kalemleri">
+      <p></p>
+    </PageContainer>
   );
 }

@@ -1,9 +1,10 @@
 import React from "react";
+import PageContainer from "@/components/page-container";
 
 export default function ReportsPage() {
   return (
-    <main>
-      <h1>Raporlar</h1>
-    </main>
+    <PageContainer title="Raporlar">
+      <p></p>
+    </PageContainer>
   );
 }
