@@ -24,7 +24,7 @@ type DataProvider = {
 export default function DataProvider({ children }: DataProvider) {
   const [budgetTrackingData, setBudgetTrackingData] =
     useLocalStorage<BudgetTrackingData | null>(
-      "budgetTrackingLocalStorageKey",
+      "budgetTrackingLocalStorageData",
       null
     );
   return (
