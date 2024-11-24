@@ -20,7 +20,7 @@ export type CategoryType = {
   id: string;
   categoryName: string;
   categoryType: "income" | "expense";
-  categoryLimit: number | null;
+  categoryLimit: number;
 };
 
 export const columns: ColumnDef<CategoryType>[] = [
@@ -63,10 +63,10 @@ export const columns: ColumnDef<CategoryType>[] = [
     accessorKey: "categoryLimit",
     header: "Kategori Limiti",
     cell: ({ row }) => {
-      const amount = parseFloat(row.getValue("categoryLimit"));
+      const amount = row.getValue("categoryLimit") as number;
       return (
         <div className=" font-medium">
-          {amount ? formatMoney(amount) : "LİMİTSİZ"}
+          {amount > 0 ? formatMoney(amount) : "LİMİTSİZ"}
         </div>
       );
     },

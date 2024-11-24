@@ -31,20 +31,10 @@ const FormSchema = z.object({
   categoryType: z.enum(["income", "expense"], {
     required_error: "Lütfen bir kategori türü seçiniz.",
   }),
-  categoryLimit: z
-    .string()
-    .optional()
-    .transform((value) => {
-      if (value === "") return undefined;
-      const parsedValue = Number(value);
-      return isNaN(parsedValue) ? value : parsedValue;
-    })
-    .refine((value) => value === undefined || typeof value === "number", {
-      message: "Lütfen geçerli bir sayı giriniz.",
-    })
-    .refine((value) => value === undefined || value > 0, {
-      message: "Lütfen pozitif bir sayı giriniz.",
-    }),
+  categoryLimit: z.coerce
+    .number()
+    .min(0, { message: "Lütfen geçerli bir tutar giriniz." })
+    .optional(),
 });
 
 export default function CategoryForm() {
@@ -53,12 +43,16 @@ export default function CategoryForm() {
     defaultValues: {
       categoryName: "",
       categoryType: "income",
-      categoryLimit: undefined,
+      categoryLimit: 0,
     },
   });
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
-    console.log(data)
+    form.reset({
+      categoryName: "",
+      categoryType: "income",
+      categoryLimit: 0,
+    });
     toast({
       title: "You submitted the following values:",
       description: (
@@ -75,7 +69,7 @@ export default function CategoryForm() {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="w-2/3 space-y-6"
+        className="space-y-6"
         noValidate
       >
         <FormField
