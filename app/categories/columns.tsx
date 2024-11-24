@@ -17,7 +17,7 @@ import {
 import { Checkbox } from "@/components/ui/checkbox";
 
 export type CategoryType = {
-  id: string;
+  id: number;
   categoryName: string;
   categoryType: "income" | "expense";
   categoryLimit: number;

@@ -22,7 +22,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
-import { toast } from "@/hooks/use-toast";
+
+import { BudgetTrackingData, useDataProvider } from "@/lib/data-provider";
+import { CategoryType } from "./columns";
 
 const FormSchema = z.object({
   categoryName: z.string().min(2, {
@@ -38,6 +40,8 @@ const FormSchema = z.object({
 });
 
 export default function CategoryForm() {
+  const { setBudgetTrackingData, budgetTrackingData } = useDataProvider();
+
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -48,18 +52,29 @@ export default function CategoryForm() {
   });
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
+    const newCategory = {
+      ...data,
+      id:
+        (budgetTrackingData?.categories?.length as number) > 0
+          ? (budgetTrackingData?.categories.length as number) + 1
+          : 0,
+    } as CategoryType;
+
+    const updatedCategories =
+      (budgetTrackingData?.categories?.length as number) > 0
+        ? [...(budgetTrackingData?.categories as CategoryType[]), newCategory]
+        : [newCategory];
+
+    const updatedTrackingData = {
+      ...budgetTrackingData,
+      categories: updatedCategories,
+    } as BudgetTrackingData;
+
+    setBudgetTrackingData(updatedTrackingData);
     form.reset({
       categoryName: "",
       categoryType: "income",
       categoryLimit: 0,
-    });
-    toast({
-      title: "You submitted the following values:",
-      description: (
-        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-          <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-        </pre>
-      ),
     });
   }
 

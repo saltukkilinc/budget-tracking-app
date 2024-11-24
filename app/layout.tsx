@@ -8,6 +8,7 @@ import { cookies } from "next/headers";
 import { ThemeProvider } from "@/components/theme-provider";
 import Header from "@/components/header";
 import { Toaster } from "@/components/ui/toaster";
+import DataProvider from "@/lib/data-provider";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -47,7 +48,7 @@ export default function RootLayout({
             <AppSidebar />
             <main className="w-full">
               <Header />
-              {children}
+              <DataProvider>{children}</DataProvider>
             </main>
             <Toaster />
           </SidebarProvider>

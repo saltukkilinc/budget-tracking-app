@@ -8,3 +8,5 @@ export const formatMoney = (
     currency: currency,
   }).format(amount);
 };
+
+
