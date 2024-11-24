@@ -52,7 +52,12 @@ export const columns: ColumnDef<CategoryType>[] = [
   },
   {
     accessorKey: "categoryType",
-    header: "kategori Türü",
+    header: "Kategori Türü",
+    cell: ({ row }) => (
+      <div className=" font-medium">
+        {row.getValue("categoryType") === "income" ? "GELİR" : "GİDER"}
+      </div>
+    ),
   },
   {
     accessorKey: "categoryLimit",
