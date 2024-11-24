@@ -34,11 +34,15 @@ import {
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  filterItemKey: string;
+  filterInputPlaceholder: string;
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
+  filterItemKey,
+  filterInputPlaceholder,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -65,19 +69,19 @@ export function DataTable<TData, TValue>({
     <div>
       <div className="flex items-center py-4">
         <Input
-          placeholder="Kalem isimlerini filtrele..."
+          placeholder={filterInputPlaceholder}
           value={
-            (table.getColumn("itemName")?.getFilterValue() as string) ?? ""
+            (table.getColumn(filterItemKey)?.getFilterValue() as string) ?? ""
           }
           onChange={(event) =>
-            table.getColumn("itemName")?.setFilterValue(event.target.value)
+            table.getColumn(filterItemKey)?.setFilterValue(event.target.value)
           }
           className="max-w-sm"
         />
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" className="ml-auto">
-              Columns
+              Kolonlar
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
@@ -144,7 +148,7 @@ export function DataTable<TData, TValue>({
                   colSpan={columns.length}
                   className="h-24 text-center"
                 >
-                  No results.
+                  Herhangi bir veri bulunamadı.Lütfen ekleyiniz.
                 </TableCell>
               </TableRow>
             )}

@@ -1,13 +1,10 @@
 "use client";
-import { format } from "date-fns";
-import { tr } from "date-fns/locale";
 
 import { formatMoney } from "@/lib/helper";
 import { ColumnDef } from "@tanstack/react-table";
-import { ArrowUpDown, MoreHorizontal, Pencil, Trash2 } from "lucide-react";
+import { MoreHorizontal, Pencil, Trash2 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
 
 import {
   DropdownMenu,
@@ -17,17 +14,16 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Checkbox } from "@/components/ui/checkbox";
 
-export type IncomeAndExpensesItemsType = {
+export type CategoryType = {
   id: string;
-  itemName: string;
-  itemAmount: number;
   categoryName: string;
-  itemDate: string;
-  itemDescription: string;
+  categoryType: "income" | "expense";
+  categoryLimit: number | null;
 };
 
-export const columns: ColumnDef<IncomeAndExpensesItemsType>[] = [
+export const columns: ColumnDef<CategoryType>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -51,47 +47,24 @@ export const columns: ColumnDef<IncomeAndExpensesItemsType>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "itemName",
-    header: "Kalem Adı",
-  },
-  {
-    accessorKey: "itemAmount",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Kalem Tutarı
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      );
-    },
-    cell: ({ row }) => {
-      const amount = parseFloat(row.getValue("itemAmount"));
-      const formattedMoney = formatMoney(amount);
-      return <div className=" font-medium">{formattedMoney}</div>;
-    },
-  },
-  {
     accessorKey: "categoryName",
     header: "Kategori Adı",
   },
   {
-    accessorKey: "itemDate",
-    header: "Tarih",
+    accessorKey: "categoryType",
+    header: "kategori Türü",
+  },
+  {
+    accessorKey: "categoryLimit",
+    header: "Kategori Limiti",
     cell: ({ row }) => {
-      const dateString = row.getValue("itemDate") as string;
+      const amount = parseFloat(row.getValue("categoryLimit"));
       return (
         <div className=" font-medium">
-          {format(dateString, "dd MMMM yyyy", { locale: tr })}
+          {amount ? formatMoney(amount) : "LİMİTSİZ"}
         </div>
       );
     },
-  },
-  {
-    accessorKey: "itemDescription",
-    header: "Açıklama",
   },
   {
     id: "actions",
