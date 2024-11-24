@@ -3,7 +3,8 @@ import React from "react";
 
 import { DataTable } from "../../components/data-table";
 import { IncomeAndExpensesItemsType, columns } from "./columns";
-
+import { Button } from "@/components/ui/button";
+import { Plus } from "lucide-react";
 
 async function getData(): Promise<IncomeAndExpensesItemsType[]> {
   return [
@@ -30,6 +31,10 @@ export default async function IncomeAndExpanseItemsPage() {
   const data = await getData();
   return (
     <PageContainer title="Gelir ve Gider Kalemleri">
+      <Button size="lg">
+        <Plus strokeWidth={3} />
+        Eklemek İçin Tıklayınız!
+      </Button>
       <DataTable
         columns={columns}
         data={data}

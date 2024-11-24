@@ -2,6 +2,8 @@ import PageContainer from "@/components/page-container";
 import React from "react";
 import { CategoryType, columns } from "./columns";
 import { DataTable } from "@/components/data-table";
+import { Button } from "@/components/ui/button";
+import { Plus } from "lucide-react";
 
 async function getData(): Promise<CategoryType[]> {
   return [
@@ -30,6 +32,10 @@ export default async function CategoriesPage() {
   const data = await getData();
   return (
     <PageContainer title="Kategoriler">
+      <Button size="lg">
+        <Plus strokeWidth={3} />
+        Eklemek İçin Tıklayınız!
+      </Button>
       <DataTable
         columns={columns}
         data={data}
