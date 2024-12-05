@@ -36,6 +36,7 @@ import { CalendarIcon } from "lucide-react";
 import { format } from "date-fns/format";
 import { IncomeAndExpensesItemsType } from "./columns";
 import { formatISO, startOfDay } from "date-fns";
+import Link from "next/link";
 
 const FormSchema = z.object({
   itemName: z.string().min(2, {
@@ -153,19 +154,23 @@ export default function IncomeAndExpensesForm() {
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  {budgetTrackingData?.categories.map((i) => (
-                    <SelectItem
-                      value={i.categoryName + "," + i.categoryType}
-                      key={i.id}
-                      className={cn(
-                        i.categoryType === "expense"
-                          ? "text-red-500"
-                          : "text-green-500"
-                      )}
-                    >
-                      {i.categoryName}
-                    </SelectItem>
-                  ))}
+                  {(budgetTrackingData?.categories?.length as number) > 0 ? (
+                    budgetTrackingData?.categories.map((i) => (
+                      <SelectItem
+                        value={i.categoryName + "," + i.categoryType}
+                        key={i.id}
+                        className={cn(
+                          i.categoryType === "expense"
+                            ? "text-red-500"
+                            : "text-green-500"
+                        )}
+                      >
+                        {i.categoryName}
+                      </SelectItem>
+                    ))
+                  ) : (
+                    <Link href="/categories">Önce kategori eklemek için tıklayınız.!</Link>
+                  )}
                 </SelectContent>
               </Select>
               <FormMessage />
