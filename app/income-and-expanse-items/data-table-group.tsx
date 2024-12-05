@@ -1,5 +1,4 @@
 "use client";
-import { useState } from "react";
 
 import { AlertCircle, Plus } from "lucide-react";
 
@@ -14,12 +13,15 @@ import IncomeAndExpensesForm from "./form";
 import { useDataProvider } from "@/lib/data-provider";
 
 export default function DataTableGroup() {
-  const [isDialogOpen, setDialogOpen] = useState(false);
-  const { budgetTrackingData } = useDataProvider();
+  const { budgetTrackingData, isDialogOpenHandler, setIsDialogOpen } =
+    useDataProvider();
 
   return (
     <div>
-      <Button size="lg" onClick={() => setDialogOpen(true)}>
+      <Button
+        size="lg"
+        onClick={() => setIsDialogOpen({ name: "budgetItemForm", open: true })}
+      >
         <Plus strokeWidth={3} />
         Eklemek İçin Tıklayınız!
       </Button>
@@ -43,8 +45,10 @@ export default function DataTableGroup() {
 
       <FormDialog
         title="Bütçe Kalem Formu"
-        isDialogOpen={isDialogOpen}
-        setDialogOpen={setDialogOpen}
+        isDialogOpen={isDialogOpenHandler("budgetItemForm")}
+        setDialogOpen={(open) =>
+          setIsDialogOpen({ name: "budgetItemForm", open })
+        }
       >
         <IncomeAndExpensesForm />
       </FormDialog>

@@ -1,7 +1,13 @@
 "use client";
 import { CategoryType } from "@/app/categories/columns";
 import { IncomeAndExpensesItemsType } from "@/app/income-and-expanse-items/columns";
-import { createContext, Dispatch, SetStateAction, useContext } from "react";
+import {
+  createContext,
+  Dispatch,
+  SetStateAction,
+  useContext,
+  useState,
+} from "react";
 
 import { useLocalStorage } from "@/hooks/use-locale-storage";
 
@@ -13,6 +19,8 @@ export type BudgetTrackingData = {
 type ContextTypes = {
   budgetTrackingData: BudgetTrackingData;
   setBudgetTrackingData: Dispatch<SetStateAction<BudgetTrackingData>>;
+  isDialogOpenHandler: (name: PopoverNameType) => boolean;
+  setIsDialogOpen: Dispatch<SetStateAction<PopoverType>>;
 } | null;
 
 const DataContext = createContext<ContextTypes>(null);
@@ -20,6 +28,9 @@ const DataContext = createContext<ContextTypes>(null);
 type DataProvider = {
   children: React.ReactNode;
 };
+type PopoverNameType = "categoryForm" | "budgetItemForm";
+
+type PopoverType = { name: PopoverNameType; open: boolean };
 
 export default function DataProvider({ children }: DataProvider) {
   const [budgetTrackingData, setBudgetTrackingData] =
@@ -27,8 +38,24 @@ export default function DataProvider({ children }: DataProvider) {
       categories: [],
       incomeAndExpensesItems: [],
     });
+  const [isDialogOpen, setIsDialogOpen] = useState<PopoverType>({
+    name: "categoryForm",
+    open: false,
+  });
+  const isDialogOpenHandler = (name: PopoverNameType) => {
+    return isDialogOpen.name === name && isDialogOpen.open;
+  };
+  //  (open) =>  setIsPopoverOpen({ name: "from", open })
+
   return (
-    <DataContext.Provider value={{ budgetTrackingData, setBudgetTrackingData }}>
+    <DataContext.Provider
+      value={{
+        budgetTrackingData,
+        setBudgetTrackingData,
+        isDialogOpenHandler,
+        setIsDialogOpen,
+      }}
+    >
       {children}
     </DataContext.Provider>
   );
