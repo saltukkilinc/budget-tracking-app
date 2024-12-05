@@ -8,7 +8,7 @@ import { useLocalStorage } from "@/hooks/use-locale-storage";
 export type BudgetTrackingData = {
   categories: CategoryType[];
   incomeAndExpensesItems: IncomeAndExpensesItemsType[];
-} | null;
+};
 
 type ContextTypes = {
   budgetTrackingData: BudgetTrackingData;
@@ -23,10 +23,10 @@ type DataProvider = {
 
 export default function DataProvider({ children }: DataProvider) {
   const [budgetTrackingData, setBudgetTrackingData] =
-    useLocalStorage<BudgetTrackingData | null>(
-      "budgetTrackingLocalStorageData",
-      null
-    );
+    useLocalStorage<BudgetTrackingData>("budgetTrackingLocalStorageData", {
+      categories: [],
+      incomeAndExpensesItems: [],
+    });
   return (
     <DataContext.Provider value={{ budgetTrackingData, setBudgetTrackingData }}>
       {children}

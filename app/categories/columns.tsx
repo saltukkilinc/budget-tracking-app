@@ -15,6 +15,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Checkbox } from "@/components/ui/checkbox";
+import { useDataProvider } from "@/lib/data-provider";
 
 export type CategoryType = {
   id: number;
@@ -75,7 +76,8 @@ export const columns: ColumnDef<CategoryType>[] = [
     id: "actions",
     cell: ({ row }) => {
       const item = row.original;
-      console.log(item.id);
+      // eslint-disable-next-line react-hooks/rules-of-hooks
+      const { setBudgetTrackingData } = useDataProvider();
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -87,7 +89,14 @@ export const columns: ColumnDef<CategoryType>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>İşlemler</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() =>
+                setBudgetTrackingData((prev) => ({
+                  ...prev,
+                  categories: prev.categories.filter((i) => i.id !== item.id),
+                }))
+              }
+            >
               <Trash2 />
               SİL
             </DropdownMenuItem>

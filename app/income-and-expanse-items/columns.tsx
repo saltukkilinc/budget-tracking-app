@@ -18,6 +18,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
+import { useDataProvider } from "@/lib/data-provider";
 
 export type IncomeAndExpensesItemsType = {
   id: number;
@@ -118,7 +119,8 @@ export const columns: ColumnDef<IncomeAndExpensesItemsType>[] = [
     id: "actions",
     cell: ({ row }) => {
       const item = row.original;
-      console.log(item.id);
+      // eslint-disable-next-line react-hooks/rules-of-hooks
+      const { setBudgetTrackingData } = useDataProvider();
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -130,7 +132,16 @@ export const columns: ColumnDef<IncomeAndExpensesItemsType>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>İşlemler</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() =>
+                setBudgetTrackingData((prev) => ({
+                  ...prev,
+                  incomeAndExpensesItems: prev.incomeAndExpensesItems.filter(
+                    (i) => i.id !== item.id
+                  ),
+                }))
+              }
+            >
               <Trash2 />
               SİL
             </DropdownMenuItem>
