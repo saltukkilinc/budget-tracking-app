@@ -25,7 +25,7 @@ export type IncomeAndExpensesItemsType = {
   itemName: string;
   itemAmount: number;
   categoryName: string;
-  itemDate: string;
+  itemDate: Date;
   itemDescription: string;
 };
 
@@ -103,10 +103,10 @@ export const columns: ColumnDef<IncomeAndExpensesItemsType>[] = [
     accessorKey: "itemDate",
     header: "Tarih",
     cell: ({ row }) => {
-      const dateString = row.getValue("itemDate") as string;
+      const date = row.getValue("itemDate") as Date;
       return (
         <div className=" font-medium">
-          {format(dateString, "dd MMMM yyyy", { locale: tr })}
+          {format(date, "dd MMMM yyyy", { locale: tr })}
         </div>
       );
     },
@@ -120,7 +120,9 @@ export const columns: ColumnDef<IncomeAndExpensesItemsType>[] = [
     cell: ({ row }) => {
       const item = row.original;
       // eslint-disable-next-line react-hooks/rules-of-hooks
-      const { setBudgetTrackingData } = useDataProvider();
+      const { setBudgetTrackingData, setIsDialogOpen, setItemId } =
+        // eslint-disable-next-line react-hooks/rules-of-hooks
+        useDataProvider();
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -145,7 +147,12 @@ export const columns: ColumnDef<IncomeAndExpensesItemsType>[] = [
               <Trash2 />
               SİL
             </DropdownMenuItem>
-            <DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() => {
+                setItemId(item.id);
+                setIsDialogOpen({ name: "budgetItemForm", open: true });
+              }}
+            >
               <Pencil />
               DÜZENLE
             </DropdownMenuItem>

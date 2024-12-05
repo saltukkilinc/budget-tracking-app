@@ -12,9 +12,17 @@ import { useDataProvider } from "@/lib/data-provider";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 export default function DataTableGroup() {
-  const { budgetTrackingData, isDialogOpenHandler, setIsDialogOpen } =
-    useDataProvider();
+  const {
+    budgetTrackingData,
+    isDialogOpenHandler,
+    setIsDialogOpen,
+    itemId,
+    setItemId,
+  } = useDataProvider();
 
+  const categoryItemForEdit = budgetTrackingData?.categories?.find(
+    (i) => i.id === itemId
+  );
   return (
     <div>
       <Button
@@ -48,8 +56,9 @@ export default function DataTableGroup() {
         setDialogOpen={(open) =>
           setIsDialogOpen({ name: "categoryForm", open })
         }
+        onCloseHandler={() => setItemId(null)}
       >
-        <CategoryForm />
+        <CategoryForm values={categoryItemForEdit} />
       </FormDialog>
     </div>
   );

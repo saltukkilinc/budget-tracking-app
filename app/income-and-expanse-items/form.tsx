@@ -29,13 +29,13 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 
-import { BudgetTrackingData, useDataProvider } from "@/lib/data-provider";
+import { useDataProvider } from "@/lib/data-provider";
 
 import { cn } from "@/lib/utils";
 import { CalendarIcon } from "lucide-react";
 import { format } from "date-fns/format";
-import { IncomeAndExpensesItemsType } from "./columns";
-import { formatISO, startOfDay } from "date-fns";
+
+import { startOfDay } from "date-fns";
 import Link from "next/link";
 
 const FormSchema = z.object({
@@ -56,12 +56,23 @@ const FormSchema = z.object({
   }),
 });
 
-export default function IncomeAndExpensesForm() {
-  const { setBudgetTrackingData, budgetTrackingData } = useDataProvider();
+export type BudgetItemForm = z.infer<typeof FormSchema>;
+type BudgetItemFormType = {
+  values?: BudgetItemForm;
+};
+
+export default function IncomeAndExpensesForm({ values }: BudgetItemFormType) {
+  const {
+    budgetTrackingData,
+    updateNewBudgetItem,
+    createNewBudgetItem,
+    setIsDialogOpen,
+    setItemId,
+  } = useDataProvider();
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
-    defaultValues: {
+    defaultValues: values ?? {
       itemName: "",
       itemAmount: 0,
       categoryName: "",
@@ -71,29 +82,13 @@ export default function IncomeAndExpensesForm() {
   });
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
-    const newItem = {
-      ...data,
-      itemDate: formatISO(data.itemDate),
-      id:
-        (budgetTrackingData?.incomeAndExpensesItems?.length as number) > 0
-          ? (budgetTrackingData?.incomeAndExpensesItems.length as number) + 1
-          : 0,
-    } as IncomeAndExpensesItemsType;
-
-    const updatedItems =
-      (budgetTrackingData?.incomeAndExpensesItems?.length as number) > 0
-        ? [
-            ...(budgetTrackingData?.incomeAndExpensesItems as IncomeAndExpensesItemsType[]),
-            newItem,
-          ]
-        : [newItem];
-
-    const updatedTrackingData = {
-      ...budgetTrackingData,
-      incomeAndExpensesItems: updatedItems,
-    } as BudgetTrackingData;
-
-    setBudgetTrackingData(updatedTrackingData);
+    if (values) {
+      updateNewBudgetItem(data);
+      setIsDialogOpen({ name: "budgetItemForm", open: false });
+      setItemId(null);
+    } else {
+      createNewBudgetItem(data);
+    }
     form.reset({
       itemName: "",
       itemAmount: 0,
@@ -169,7 +164,9 @@ export default function IncomeAndExpensesForm() {
                       </SelectItem>
                     ))
                   ) : (
-                    <Link href="/categories">Önce kategori eklemek için tıklayınız.!</Link>
+                    <Link href="/categories">
+                      Önce kategori eklemek için tıklayınız.!
+                    </Link>
                   )}
                 </SelectContent>
               </Select>

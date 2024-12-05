@@ -23,8 +23,7 @@ import {
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 
-import { BudgetTrackingData, useDataProvider } from "@/lib/data-provider";
-import { CategoryType } from "./columns";
+import { useDataProvider } from "@/lib/data-provider";
 
 const FormSchema = z.object({
   categoryName: z.string().min(2, {
@@ -38,39 +37,31 @@ const FormSchema = z.object({
     .min(0, { message: "Lütfen geçerli bir tutar giriniz." })
     .optional(),
 });
+export type CategoryForm = z.infer<typeof FormSchema>;
+type CategoryFormType = {
+  values?: CategoryForm;
+};
+export default function CategoryForm({ values }: CategoryFormType) {
+  const { createNewCategory, updateCategory, setIsDialogOpen, setItemId } =
+    useDataProvider();
 
-export default function CategoryForm() {
-  const { setBudgetTrackingData, budgetTrackingData } = useDataProvider();
-
-  const form = useForm<z.infer<typeof FormSchema>>({
+  const form = useForm<CategoryForm>({
     resolver: zodResolver(FormSchema),
-    defaultValues: {
+    defaultValues: values ?? {
       categoryName: "",
       categoryType: "income",
       categoryLimit: 0,
     },
   });
 
-  function onSubmit(data: z.infer<typeof FormSchema>) {
-    const newCategory = {
-      ...data,
-      id:
-        (budgetTrackingData?.categories?.length as number) > 0
-          ? (budgetTrackingData?.categories.length as number) + 1
-          : 0,
-    } as CategoryType;
-
-    const updatedCategories =
-      (budgetTrackingData?.categories?.length as number) > 0
-        ? [...(budgetTrackingData?.categories as CategoryType[]), newCategory]
-        : [newCategory];
-
-    const updatedTrackingData = {
-      ...budgetTrackingData,
-      categories: updatedCategories,
-    } as BudgetTrackingData;
-
-    setBudgetTrackingData(updatedTrackingData);
+  function onSubmit(data: CategoryForm) {
+    if (values) {
+      updateCategory(data);
+      setIsDialogOpen({ name: "categoryForm", open: false });
+      setItemId(null);
+    } else {
+      createNewCategory(data);
+    }
     form.reset({
       categoryName: "",
       categoryType: "income",

@@ -13,9 +13,16 @@ import IncomeAndExpensesForm from "./form";
 import { useDataProvider } from "@/lib/data-provider";
 
 export default function DataTableGroup() {
-  const { budgetTrackingData, isDialogOpenHandler, setIsDialogOpen } =
-    useDataProvider();
-
+  const {
+    budgetTrackingData,
+    isDialogOpenHandler,
+    setIsDialogOpen,
+    itemId,
+    setItemId,
+  } = useDataProvider();
+  const budgetItemForEdit = budgetTrackingData?.incomeAndExpensesItems?.find(
+    (i) => i.id === itemId
+  );
   return (
     <div>
       <Button
@@ -49,8 +56,9 @@ export default function DataTableGroup() {
         setDialogOpen={(open) =>
           setIsDialogOpen({ name: "budgetItemForm", open })
         }
+        onCloseHandler={() => setItemId(null)}
       >
-        <IncomeAndExpensesForm />
+        <IncomeAndExpensesForm values={budgetItemForEdit}/>
       </FormDialog>
     </div>
   );

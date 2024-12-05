@@ -21,7 +21,7 @@ export type CategoryType = {
   id: number;
   categoryName: string;
   categoryType: "income" | "expense";
-  categoryLimit: number;
+  categoryLimit?: number | undefined;
 };
 
 export const columns: ColumnDef<CategoryType>[] = [
@@ -77,7 +77,9 @@ export const columns: ColumnDef<CategoryType>[] = [
     cell: ({ row }) => {
       const item = row.original;
       // eslint-disable-next-line react-hooks/rules-of-hooks
-      const { setBudgetTrackingData } = useDataProvider();
+      const { setBudgetTrackingData, setItemId, setIsDialogOpen } =
+        // eslint-disable-next-line react-hooks/rules-of-hooks
+        useDataProvider();
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -100,7 +102,12 @@ export const columns: ColumnDef<CategoryType>[] = [
               <Trash2 />
               SİL
             </DropdownMenuItem>
-            <DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() => {
+                setItemId(item.id);
+                setIsDialogOpen({ name: "categoryForm", open: true });
+              }}
+            >
               <Pencil />
               DÜZENLE
             </DropdownMenuItem>
