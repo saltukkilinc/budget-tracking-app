@@ -1,11 +1,12 @@
 import React from "react";
 import PageContainer from "@/components/page-container";
-import PieChartGroup from "./pie-chart-group";
+
+import BudgetItemsPayChartGroup from "./budget-items-pay-chart-group";
 
 export default function ReportsPage() {
   return (
     <PageContainer title="Raporlar">
-      <PieChartGroup />
+      <BudgetItemsPayChartGroup />
     </PageContainer>
   );
 }

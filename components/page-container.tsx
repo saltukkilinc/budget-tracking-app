@@ -12,7 +12,7 @@ export default function PageContainer({
   children,
 }: pageContainerTypes) {
   return (
-    <main className={cn("p-8", classNames)}>
+    <main className={cn("p-8 space-y-8", classNames)}>
       <h1 className="text-2xl text-center">{title}</h1>
       {children}
     </main>
