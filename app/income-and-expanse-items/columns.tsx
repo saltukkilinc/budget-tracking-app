@@ -17,9 +17,10 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { cn } from "@/lib/utils";
 
 export type IncomeAndExpensesItemsType = {
-  id: string;
+  id: number;
   itemName: string;
   itemAmount: number;
   categoryName: string;
@@ -70,12 +71,32 @@ export const columns: ColumnDef<IncomeAndExpensesItemsType>[] = [
     cell: ({ row }) => {
       const amount = parseFloat(row.getValue("itemAmount"));
       const formattedMoney = formatMoney(amount);
-      return <div className=" font-medium">{formattedMoney}</div>;
+      const isIncome =
+        (row.getValue("categoryName") as string).split(",")[1] === "income";
+      return (
+        <div
+          className={cn(
+            "font-medium",
+            isIncome ? "text-green-500" : "text-red-500"
+          )}
+        >
+          {formattedMoney}
+        </div>
+      );
     },
   },
   {
     accessorKey: "categoryName",
     header: "Kategori Adı",
+    cell: ({ row }) => {
+      const [name, type] = (row.getValue("categoryName") as string).split(",");
+      const isIncome = type === "income";
+      return (
+        <p className={cn(isIncome ? "text-green-500" : "text-red-500")}>
+          {name}
+        </p>
+      );
+    },
   },
   {
     accessorKey: "itemDate",
