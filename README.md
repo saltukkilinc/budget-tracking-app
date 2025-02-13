@@ -4,6 +4,8 @@ Welcome to the Budget Tracking App! This application helps you manage your finan
 
 ## Preview
 
+![EkranKayd2025-02-13172840-ezgif com-video-to-gif-converter](https://github.com/user-attachments/assets/427645fe-4c2f-4b5a-b3c4-810ae8d1f718)
+
 ## Features
 
 - **Income and Expense Tracking**: Easily record your income and expenses.
